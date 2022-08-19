@@ -1,7 +1,7 @@
 # BankBot
 This is a Simple Banking Concept created using Python
 
-Features
+Features:
 
 Create Bank Account.
 
