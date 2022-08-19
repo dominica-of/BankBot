@@ -1,2 +1,2 @@
 # BankBot
-This is an Simple Banking Concept created using Python
+This is a Simple Banking Concept created using Python
