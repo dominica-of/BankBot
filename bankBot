@@ -1,0 +1,126 @@
+#Bank Bot 
+import pickle
+import os
+
+class Customer:
+  def __init__(self,A):
+    self.fname=input("Enter First Name: ")
+    self.lname=input("Enter Last Name: ")
+    self.type=input("Type of Account Savings/Current?: ")
+    self.amount=int(input("Enter Amount: "))
+    while True:
+      if self.type=='Savings':
+        if self.amount<5:
+          print("Min 5 required")
+          self.amount=int(input("Please Enter amount again: "))
+        else:
+          break
+      if self.type=='Current':
+        if self.amount<100:
+          print("Min 100 required")
+          self.amount=int(input("Please Enter amount again: "))
+        else:
+          break
+    self.accountNo=A
+    print("Your Account No. is:",self.accountNo)
+
+  def Display(self):
+    print("{:<15} {:<15} {:<15} {:<15} {:<15}".format(self.accountNo,self.fname,self.lname,self.type,self.amount))
+
+
+def createAccount():
+  try:
+    file=open('bank.bin','rb')
+    while True:
+      t=pickle.load(file)
+      A=t.accountNo
+  except FileNotFoundError as e:
+    A=121000
+  except EOFError as e:
+    A=A+1
+    file.close()
+  file=open('bank.bin','ab')
+  s=Customer(A)
+  pickle.dump(s,file)
+  file.close()
+  option()
+
+def ViewAccount():
+  try:
+    file=open('bank.bin','rb')
+    print("{:<15} {:<15} {:<15} {:<15} {:<15}".format('Account No.','First Name','Last Name','Type','Amount'))
+    while True:
+      t=pickle.load(file)
+      t.Display()
+  except FileNotFoundError as e:
+    print("\nThere Are No Records")
+  except EOFError as e:
+    file.close()
+  option()
+
+def Update():
+  file=open('bank.bin','rb')
+  file1=open('tmp.bin','wb')
+  x=int(input("Enter Bank Account: "))
+  try:
+    while True:
+      t=pickle.load(file)
+      if t.accountNo==x:
+        fname=input("Update First Name: ")
+        t.fname=fname
+        lname=input("Update Last Name: ")
+        t.lname=lname
+      pickle.dump(t,file1)
+  except:
+    pass
+  finally:
+    file.close()
+    file1.close()
+  os.remove('bank.bin')
+  os.rename('tmp.bin','bank.bin')
+  option()
+
+def Search():
+  file=open('bank.bin','rb')
+  x=int(input("Enter Bank Account: "))
+  try:
+    while True:
+      t=pickle.load(file)
+      if t.accountNo==x:
+        print("\nName:",t.fname +" " + t.lname)
+        print("Account Type:",t.type)
+        print("Amount:",t.amount)
+        print("Account No.:",t.accountNo)
+        break
+  except:
+    pass
+  finally:
+    file.close()
+  option()
+
+def Exit():
+     print("Thank you for choosing Us!")
+pass
+
+def option():
+  print()
+  print("Welcome!! What Do You Want to  Do?\n1. Create Account\n2. View Account\n3. Update\n4. Search\n5. Exit")
+  n=int(input())
+  if n==1:
+    createAccount()
+  elif n==2:
+    ViewAccount()
+  elif n==3:
+    Update()
+  elif n==4:
+    Search()
+  elif n==5:
+    Exit()
+  else:
+    print("Invalid option, please try again")
+    option()
+
+
+s="\nAMANFO BANK BOT\n"
+print(s.center(50,'*'))
+option()
